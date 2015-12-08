@@ -15,12 +15,12 @@ import com.cattsoft.fast.codegen.freemarker.SysCodeGen;
 import com.cattsoft.fast.codegen.freemarker.Utils;
 
 public class ConnectionInit {
-	
+
 	Statement sm = null;
-	private static String dbdrivername =null;
-	private static String dburl =null;	
+	private static String dbdrivername = null;
+	private static String dburl = null;
 	private static String username = null;
-	private static String password = null;	
+	private static String password = null;
 	Connection conn = null;
 
 	public Connection getConn() {
@@ -31,11 +31,9 @@ public class ConnectionInit {
 		this.conn = conn;
 	}
 
-	public ConnectionInit(String dbtype) {
-		if (dbtype.equals("FAST")) {
-			getConfigInfo();
-			genFolder();
-		}
+	public ConnectionInit() {
+		getConfigInfo();
+		genFolder();
 	}
 
 	public Connection getConnection() {
@@ -66,80 +64,80 @@ public class ConnectionInit {
 		} catch (SQLException e) {
 		}
 	}
-	
 
 	private static void trace(String content) {
 		System.out.print("-->");
 		System.out.println(content);
 	}
-	
+
 	public static void main(String[] args) throws IOException {
 		String configPath = "jdbc-config.properties";
-		 
-		 ClassLoader classLoader = ConnectionInit.class.getClassLoader();  
-		 File file = new File(classLoader.getResource(configPath).getFile());  
-		 
-		 Properties pro=new Properties ();
-		 pro.load(new FileInputStream(file));
-		 System.out.println(pro.keySet());
-		 
-		 new ConnectionInit("FAST").getConnection(); 
+
+		ClassLoader classLoader = ConnectionInit.class.getClassLoader();
+		File file = new File(classLoader.getResource(configPath).getFile());
+
+		Properties pro = new Properties();
+		pro.load(new FileInputStream(file));
+		System.out.println(pro.keySet());
+
+		new ConnectionInit().getConnection();
 	}
-	
-	
-	
-	private static void getConfigInfo(){
-		InputStream is=null;
-		try{
+
+	private static void getConfigInfo() {
+		InputStream is = null;
+		try {
 			String configPath = "jdbc-config.properties";
-			 
-			ClassLoader classLoader = ConnectionInit.class.getClassLoader();  
-			File file = new File(classLoader.getResource(configPath).getFile());  
-			 
+
+			ClassLoader classLoader = ConnectionInit.class.getClassLoader();
+			File file = new File(classLoader.getResource(configPath).getFile());
+
 			is = new FileInputStream(file);
-			
-			Properties pro=new Properties ();
+
+			Properties pro = new Properties();
 			pro.load(is);
 			dbdrivername = pro.getProperty("database.jdbc.driver");
-			dburl=pro.getProperty("database.jdbc.url");
-			username=pro.getProperty("database.jdbc.username");
-			password=pro.getProperty("database.jdbc.password");
-			//模板存放地址
-			SysCodeGen.SYSTEM_TEMPLATE_DIR=pro.getProperty("templateDir");
-			
-			//文件生成地址
-			SysCodeGen.fileDir=pro.getProperty("createFileDir");			
-			//载入表名字
-			Utils.strTableName=pro.getProperty("tableName");
-			Utils.strDatabase=pro.getProperty("strDatabase");
-			
-			//特殊字段
-			SysCodeGen.insertWithoutColumnList = Arrays.asList(pro.getProperty("insertWithoutColumn").split(","));
-			SysCodeGen.updateWithoutColumnList = Arrays.asList(pro.getProperty("updateWithoutColumn").split(","));
-		}catch(Exception e){
+			dburl = pro.getProperty("database.jdbc.url");
+			username = pro.getProperty("database.jdbc.username");
+			password = pro.getProperty("database.jdbc.password");
+			// 模板存放地址
+			SysCodeGen.SYSTEM_TEMPLATE_DIR = pro.getProperty("templateDir");
+
+			// 文件生成地址
+			SysCodeGen.fileDir = pro.getProperty("createFileDir");
+			// 载入表名字
+			Utils.strTableName = pro.getProperty("tableName");
+			Utils.strDatabase = pro.getProperty("strDatabase");
+
+			// 特殊字段
+			SysCodeGen.insertWithoutColumnList = Arrays.asList(pro.getProperty(
+					"insertWithoutColumn").split(","));
+			SysCodeGen.updateWithoutColumnList = Arrays.asList(pro.getProperty(
+					"updateWithoutColumn").split(","));
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			try {
 				is.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} 
+		}
 	}
-	
-	private static void genFolder(){
-		//,"delegate","delegate//impl","delegate//impl//ejb","delegate//impl//bean","dao//impl","domain","domain//impl","applicationXml"
-		String folders[]=new String[]{"vo","dao","service","service//impl","controller","controller//web","jsp"};
-		String strBaseDir=SysCodeGen.fileDir;
-		File baseDir=new  File(strBaseDir);
+
+	private static void genFolder() {
+		// ,"delegate","delegate//impl","delegate//impl//ejb","delegate//impl//bean","dao//impl","domain","domain//impl","applicationXml"
+		String folders[] = new String[] { "vo", "dao", "service",
+				"service//impl", "controller", "controller//web", "jsp" };
+		String strBaseDir = SysCodeGen.fileDir;
+		File baseDir = new File(strBaseDir);
 		baseDir.mkdir();
-		for(String str:folders){
-			String folder=strBaseDir+str;
-			File file=new File(folder);
-			if(!file.exists()){
+		for (String str : folders) {
+			String folder = strBaseDir + str;
+			File file = new File(folder);
+			if (!file.exists()) {
 				file.mkdir();
 			}
 		}
 	}
-	
+
 }

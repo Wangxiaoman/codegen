@@ -29,8 +29,8 @@ public class OperateDB {
 		this.mysqlConn = mysqlConn;
 	}
 
-	public OperateDB(String dbtype){
-		ConnectionInit mysqlConn=new ConnectionInit(dbtype);
+	public OperateDB(){
+		ConnectionInit mysqlConn=new ConnectionInit();
 		this.myConn=mysqlConn.getConnection();
 		try{
 			this.stmt=myConn.createStatement();
@@ -94,7 +94,7 @@ public class OperateDB {
 	 }
 
 	public static void main(String[] args) throws SQLException {
-		OperateDB mydbt = new OperateDB("FAST");
+		OperateDB mydbt = new OperateDB();
 		//mydbt.executeUpdate("insert into table_info values('1','1','1','1','1')");
 //		ResultSet rs = mydbt.executeQuery("select * from table_info");
 //		while(rs.next()){

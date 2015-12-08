@@ -22,13 +22,13 @@ public class SysCodeGen {
 	public static List<String> updateWithoutColumnList=null;
 	
 	public SysCodeGen(){
-		new ConnectionInit("FAST");
+		new ConnectionInit();
 	}
 	
 	/*
 	 * 接口
 	 */
-	public  void create(String template,String flag,String dir) throws SQLException{
+	public void create(String template,String flag,String dir) throws SQLException{
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
 		List<String> tableNameList=Utils.getAllTableName();
 		for(int i=0;i<tableNameList.size();i++){	

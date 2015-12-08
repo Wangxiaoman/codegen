@@ -26,7 +26,7 @@ public class Utils {
 			list = Arrays.asList(str);
 		}else{
 			StringBuilder strSql=new StringBuilder("show tables from ").append(strDatabase);
-			OperateDB operateDb=new OperateDB("FAST");
+			OperateDB operateDb=new OperateDB();
 			ResultSet rs=operateDb.executeQuery(strSql.toString());
 			while(rs.next()){
 				list.add(rs.getString("Tables_in_"+strDatabase));
@@ -38,7 +38,7 @@ public class Utils {
 	
 	//得到 Fast_dev 用户下每张 表 所对应的 列名去掉“_”字母转换变成JAVA实体类属性
 	public static List<String> getColumn(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB("FAST");
+		OperateDB operateDb=new OperateDB();
 		List<String> list=new ArrayList<String>();
 		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
 		ResultSet rs=operateDb.executeQuery(strSql.toString());
@@ -50,7 +50,7 @@ public class Utils {
 	}
 	//获取数据库用户下每张表对应的字段（不做改变）
 	public static List<String> getDBColumn(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB("FAST");
+		OperateDB operateDb=new OperateDB();
 		List<String> list=new ArrayList<String>();
 		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
 		ResultSet rs=operateDb.executeQuery(strSql.toString());
@@ -63,7 +63,7 @@ public class Utils {
 	
 	//得到 Fast_dev 用户下每张 表 所对应的 列名(未转变)、数据类型及列的注释
 	public static List<HashMap<String,Object>> getColumnDataType(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB("FAST");
+		OperateDB operateDb=new OperateDB();
 		List<HashMap<String,Object>> list=new ArrayList<HashMap<String,Object>>();
 		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
 		ResultSet rs=operateDb.executeQuery(strSql.toString());
@@ -94,7 +94,7 @@ public class Utils {
 	
 	//得到 Fast_dev 用户下每张 表 所对应的 列名(未转变)、数据类型及列的注释
 	public static List<HashMap<String,Object>> getColumnNameAndType(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB("FAST");
+		OperateDB operateDb=new OperateDB();
 		List<HashMap<String,Object>> list=new ArrayList<HashMap<String,Object>>();
 		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
 		ResultSet rs=operateDb.executeQuery(strSql.toString());
@@ -168,7 +168,7 @@ public class Utils {
 	 * @throws SQLException
 	 */
 	public static Map<String,String> getColumnMap(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB("FAST");
+		OperateDB operateDb=new OperateDB();
 		Map<String,String> map =new HashMap<String, String>();
 		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
 		ResultSet rs=operateDb.executeQuery(strSql.toString());
@@ -186,7 +186,7 @@ public class Utils {
 	 * @throws SQLException
 	 */
 	public static Map<String,String> getColumnMapElseByOne(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB("FAST");
+		OperateDB operateDb=new OperateDB();
 		Map<String,String> map =new HashMap<String, String>();
 		StringBuilder strSql = new StringBuilder();
 		strSql.append("select distinct column_name  from dba_cons_columns where table_name='"+tableName+"'" );
