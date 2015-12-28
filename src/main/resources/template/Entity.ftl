@@ -3,12 +3,14 @@ import java.util.Date;
 
 public class ${className} {
 
-<#if domainWithoutNot == 'use' >
-	<#list fieldName as field>
-		${field.COMMENT}
-		private ${field.TYPE} ${field.NAME};
-	</#list>
-</#if>
+
+<#list fieldName as field>
+	<#if domainWithoutNot == 'use' >
+	${field.COMMENT}
+	</#if>
+	private ${field.TYPE} ${field.NAME};
+</#list>
+
 
 <#list fieldName as field>
 	public void set${field.NAME?cap_first}(${field.TYPE} ${field.NAME}) {
