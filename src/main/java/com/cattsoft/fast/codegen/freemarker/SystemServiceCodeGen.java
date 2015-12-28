@@ -34,6 +34,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 				}
 			}
 			hashMap.put("fieldName", list);
+			hashMap.put("domainWithoutNot", domainWithoutNot);
 			hashMap.put("filedMap", Utils.getColumnMap(tableName));
 			FreeMarkerUtils.createFile(hashMap, strPath);
 			

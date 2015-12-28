@@ -20,6 +20,9 @@ public class SysCodeGen {
 	public static List<String> insertWithoutColumnList=null;
 	//update语句中不需要的字段
 	public static List<String> updateWithoutColumnList=null;
+	//
+	public static String domainWithoutNot=""; 
+	
 	
 	public SysCodeGen(){
 		new ConnectionInit();

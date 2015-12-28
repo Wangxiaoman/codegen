@@ -113,6 +113,8 @@ public class ConnectionInit {
 					"insertWithoutColumn").split(","));
 			SysCodeGen.updateWithoutColumnList = Arrays.asList(pro.getProperty(
 					"updateWithoutColumn").split(","));
+			
+			SysCodeGen.domainWithoutNot = pro.getProperty("domainWithoutNot");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
