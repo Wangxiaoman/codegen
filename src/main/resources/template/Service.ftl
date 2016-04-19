@@ -1,7 +1,7 @@
 package com.blink.service;
 
 import com.blink.domain.${className};
-import com.blink.platform.web.pag.Pagination;
+import com.blink.platform.web.paging.Pagination;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface ${className}Service {
      * @return 实体对象
      * @throws Exception 系统异常
      */
-    public int insert(${className} ${className?uncap_first}) throws Exception;
+     int insert(${className} ${className?uncap_first}) throws Exception;
 
     /**
      * 修改
@@ -22,7 +22,7 @@ public interface ${className}Service {
      * @return 更新记录数
      * @throws Exception 系统异常
      */
-    public int update(${className} ${className?uncap_first}) throws Exception;
+     int update(${className} ${className?uncap_first}) throws Exception;
 
     /**
      * 删除
@@ -31,7 +31,7 @@ public interface ${className}Service {
      * @return 删除记录数
      * @throws Exception 系统异常
      */
-    public int delete(int id) throws Exception;
+     int delete(int id) throws Exception;
 
     /**
      * 查询集合 -- 针对web站
@@ -40,7 +40,7 @@ public interface ${className}Service {
      * @return 实体对象列表
      * @throws Exception 系统异常
      */
-    public Pagination<${className}> queryWebList(int page,int pageSize) throws Exception;
+    Pagination<${className}> queryWebList(int page,int pageSize) throws Exception;
     
     /**
      * 查询集合
@@ -49,7 +49,7 @@ public interface ${className}Service {
      * @return 实体对象列表
      * @throws Exception 系统异常
      */
-    public List<${className}> queryList(int page,int pageSize) throws Exception;
+    List<${className}> queryList(int page,int pageSize) throws Exception;
 
     /**
      * 查询对象
@@ -58,6 +58,6 @@ public interface ${className}Service {
      * @return 实体对象
      * @throws Exception 系统异常
      */
-    public ${className} queryById(int id) throws Exception;
+    ${className} queryById(int id) throws Exception;
 
 }
