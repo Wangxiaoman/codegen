@@ -14,10 +14,10 @@ public class SystemWebCodeGen extends SysCodeGen{
 	private static final String CONTROLLER_JSON_TEMPLATE="controllerJson.ftl";
 
 	
-	private static final String JSP_EDIT_TEMPLATE="jsp-edit.ftl";
-	private static final String JSP_EDITNEW_TEMPLATE="jsp-editNew.ftl";
-	private static final String JSP_INDEX_TEMPLATE="jsp-index.ftl";
-	private static final String JSP_SHOW_TEMPLATE="jsp-show.ftl";
+//	private static final String JSP_EDIT_TEMPLATE="jsp-edit.ftl";
+//	private static final String JSP_EDITNEW_TEMPLATE="jsp-editNew.ftl";
+//	private static final String JSP_INDEX_TEMPLATE="jsp-index.ftl";
+//	private static final String JSP_SHOW_TEMPLATE="jsp-show.ftl";
 	private static final String APPLICATION="applicationContext-system-service.ftl";
 	
 	
@@ -170,10 +170,14 @@ public class SystemWebCodeGen extends SysCodeGen{
 	}
 	
 	public void createJsp() throws SQLException{
-		createJspIndex(SystemWebCodeGen.JSP_LIST_TEMPLATE,"jsp");
-//		createJspEdit(SystemWebCodeGen.JSP_EDIT_TEMPLATE,"jsp");
+//	createJspEdit(SystemWebCodeGen.JSP_EDIT_TEMPLATE,"jsp");
+//  createJspShow(SystemWebCodeGen.JSP_SHOW_TEMPLATE,"jsp");
+//	createJspNew(SystemWebCodeGen.JSP_EDIT_TEMPLATE,"jsp");
+	  
 		createJspNew(SystemWebCodeGen.JSP_ADD_TEMPLATE,"jsp");
-//		createJspShow(SystemWebCodeGen.JSP_SHOW_TEMPLATE,"jsp");
+		createJspIndex(SystemWebCodeGen.JSP_LIST_TEMPLATE,"jsp");
+		
+
 	}
 	
 	public void createDelegate() throws SQLException{
@@ -188,7 +192,8 @@ public class SystemWebCodeGen extends SysCodeGen{
 //		createJspEdit(SystemWebCodeGen.JSP_EDIT_TEMPLATE,"jsp");
 //		createJspNew(SystemWebCodeGen.JSP_EDITNEW_TEMPLATE,"jsp");
 //		createJspShow(SystemWebCodeGen.JSP_SHOW_TEMPLATE,"jsp");
-		
+//	  createJspNew(SystemWebCodeGen.JSP_EDIT_TEMPLATE,"jsp");
+	  
 		createJspIndex(SystemWebCodeGen.JSP_LIST_TEMPLATE,"jsp");
 		createJspNew(SystemWebCodeGen.JSP_ADD_TEMPLATE,"jsp");
 		
