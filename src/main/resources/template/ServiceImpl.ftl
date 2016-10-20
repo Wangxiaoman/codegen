@@ -1,14 +1,14 @@
-package com.blink.service.impl;
+package com.ott.service.impl;
 
 import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.blink.dao.${className}Dao;
-import com.blink.domain.${className};
-import com.blink.service.${className}Service;
-import com.blink.platform.web.paging.Pagination;
+import com.ott.dao.${className}Dao;
+import com.ott.domain.${className};
+import com.ott.service.${className}Service;
+import com.ott.platform.web.paging.Pagination;
 
 @Service
 public class ${className}ServiceImpl implements ${className}Service {

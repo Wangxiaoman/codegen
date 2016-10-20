@@ -1,4 +1,4 @@
-package com.blink.domain;
+package com.ott.domain;
 import java.util.Date;
 
 public class ${className} {

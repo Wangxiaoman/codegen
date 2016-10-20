@@ -1,7 +1,7 @@
-package com.blink.service;
+package com.ott.service;
 
-import com.blink.domain.${className};
-import com.blink.platform.web.paging.Pagination;
+import com.ott.domain.${className};
+import com.ott.platform.web.paging.Pagination;
 
 import java.util.List;
 

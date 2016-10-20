@@ -1,4 +1,4 @@
-package com.blink.controller.web;
+package com.ott.controller.web;
 
 import java.util.List;
 import java.util.Date;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.blink.domain.${className};
-import com.blink.service.${className}Service;
-import com.blink.platform.web.paging.Pagination;
+import com.ott.domain.${className};
+import com.ott.service.${className}Service;
+import com.ott.platform.web.paging.Pagination;
 
 @Controller
 @RequestMapping("/web")

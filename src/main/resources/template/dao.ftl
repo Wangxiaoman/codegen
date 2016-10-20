@@ -1,6 +1,6 @@
-package com.blink.dao;
+package com.ott.dao;
 
-import com.blink.domain.${className};
+import com.ott.domain.${className};
 
 import java.util.List;
 

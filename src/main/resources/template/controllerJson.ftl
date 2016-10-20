@@ -1,4 +1,4 @@
-package com.blink.controller;
+package com.ott.controller;
 
 import java.util.List;
 import java.util.Date;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blink.domain.${className};
-import com.blink.service.${className}Service;
-import com.blink.constants.ResultJson;
-import com.blink.constants.CommonStatus;
+import com.ott.domain.${className};
+import com.ott.service.${className}Service;
+import com.ott.constants.ResultJson;
+import com.ott.constants.CommonStatus;
 
 @Controller
 public class ${className}Controller{
