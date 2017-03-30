@@ -43,6 +43,18 @@ public class ${className}ServiceImpl implements ${className}Service {
     }
 
     @Override
+    public Pagination<${className}> queryWebList(int page,int pageSize) throws Exception {
+	    try{
+	    	int totalSize = ${className?uncap_first}Dao.getCount();
+			List<${className}> ${className?uncap_first}s = ${className?uncap_first}Dao.queryList(page*pageSize, pageSize);
+			Pagination<${className}> result = new Pagination<${className}>(page,totalSize, ${className?uncap_first}s, pageSize);
+			return result ;
+        }catch(Exception ex){
+	    	throw ex;
+	    }
+    }
+    
+    @Override
     public List<${className}> queryList(int page,int pageSize) throws Exception {
     	try{
 			List<${className}> result = ${className?uncap_first}Dao.queryList(page*pageSize, pageSize);

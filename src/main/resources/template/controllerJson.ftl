@@ -31,13 +31,13 @@ public class ${className}Controller{
 	public ResultJson save(
 		@RequestParam(value = "id",defaultValue="0",required=false) int id,
 		<#list fieldName as field>
-			@RequestParam(value = "${field.NAME}") ${field.TYPE} ${field.NAME}<#if field_has_next> ,</#if>
+			@RequestParam(value = "${field.BEANNAME}") ${field.TYPE} ${field.BEANNAME}<#if field_has_next> ,</#if>
 		</#list>
 		) {
 			//增加一些校验方法
 			${className} ${className?uncap_first} = new ${className}();
 		<#list fieldName as field>
-			${className?uncap_first}.set${field.NAME?cap_first}(${field.NAME});
+			${className?uncap_first}.set${field.BEANNAME?cap_first}(${field.BEANNAME});
 		</#list>
 		try {
 			if(id>0){

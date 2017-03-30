@@ -13,6 +13,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	private static final String ENTITY_TEMPLATE = "Entity.ftl";
 	// dao
 	private static final String DAO_TEMPLATE = "dao.ftl";
+	private static final String DAO_ORACLE_TEMPLATE = "dao-oracle.ftl";
 	// service
 	private static final String SERVICE_TEMPLATE = "Service.ftl";
 	private static final String SERVICEIMPL_TEMPLATE = "ServiceImpl.ftl";
@@ -20,14 +21,14 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	// 创建Entity
 	public void createEntity(String template) throws SQLException {
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-		List<String> tableNameList = Utils.getAllTableName();
+		List<String> tableNameList = Utils.getAllTableName(mysqlOrOracle);
 		for (int i = 0; i < tableNameList.size(); i++) {
 			String tableName = tableNameList.get(i);
 			String className = Utils.toClassName(tableName);
 			String strPath = fileDir + "vo//" + className + ".java";
 			HashMap<String, Object> hashMap = new HashMap<String, Object>();
 			hashMap.put("className", className);
-			List<HashMap<String, Object>> list = Utils.getColumnNameAndType(tableName);
+			List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName,mysqlOrOracle);
 			for(Map<String,Object> map : list){
 				if(!StringUtils.isNullOrEmpty(String.valueOf(map.get("COMMENT")))){
 					map.put("COMMENT","//"+map.get("COMMENT"));
@@ -35,7 +36,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			}
 			hashMap.put("fieldName", list);
 			hashMap.put("domainWithoutNot", domainWithoutNot);
-			hashMap.put("filedMap", Utils.getColumnMap(tableName));
+			hashMap.put("filedMap", Utils.getColumnMap(tableName,mysqlOrOracle));
 			FreeMarkerUtils.createFile(hashMap, strPath);
 			
 		}
@@ -47,7 +48,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	public void createDAOImpl(String template, String flag, String dir)
 			throws SQLException {
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-		List<String> tableNameList = Utils.getAllTableName();
+		List<String> tableNameList = Utils.getAllTableName(mysqlOrOracle);
 		for (int i = 0; i < tableNameList.size(); i++) {
 			String tableName = tableNameList.get(i);
 			//List  column =Utils.getDBColumn(tableName);
@@ -55,7 +56,14 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			StringBuilder insertSqlA = getInsrtSqlA(tableName);
 			StringBuilder insertSqlB = getInsrtSqlB(tableName);
 			StringBuilder updateSql = getUpdateSql(tableName).append(" where id=#{id}");
-			StringBuilder queryBeanSql = getQueryBeanSqlA(tableName).append(" from ").append(tableName).append(" order by id desc limit #{offset},#{limit}");
+
+			StringBuilder queryBeanSql = null;
+			if(mysqlOrOracle == Utils.MYSQL){
+			    queryBeanSql = getQueryBeanSqlA(tableName).append(" from ").append(tableName).append(" order by id desc limit #{offset},#{limit}");
+			}else{
+			    queryBeanSql = getOracleQueryBeanSql(tableName);
+			}
+			
 			StringBuilder queryBeanSqlById = getQueryBeanSqlA(tableName).append(" from ").append(tableName).append(" where id=#{id}");
 			StringBuilder deleteSql = new StringBuilder("delete from ").append(tableName).append(" where id=#{id}");
 			String primaryKeyName = Utils.toFieldName(Utils
@@ -77,7 +85,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			hashMap.put("countSql", getCountSql(tableName));
 			
 			
-			List<String> columnNameList = Utils.getColumn(tableName);
+			List<String> columnNameList = Utils.getColumn(tableName,mysqlOrOracle);
 			List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 			// 列取值，不取第1个主键。主键有另外的方法
 			for (int a = 1; a < columnNameList.size(); a++) {
@@ -89,7 +97,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			}
 			
 			hashMap.put("fieldName", list);
-			hashMap.put("filedMap", Utils.getColumnMap(tableName));
+			hashMap.put("filedMap", Utils.getColumnMap(tableName,mysqlOrOracle));
 			FreeMarkerUtils.createFile(hashMap, strPath);
 		}
 	}
@@ -98,12 +106,12 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	public static StringBuilder getInsrtSqlA(String tableName)
 			throws SQLException {
 
-		List<String> dbColumns = Utils.getDBColumn(tableName);
+		List<String> dbColumns = Utils.getDBColumn(tableName,mysqlOrOracle);
 		StringBuilder strInsert = new StringBuilder("insert into " + tableName + " (");
 
 		for (int i=1;i<dbColumns.size();i++) {
 			String dbColumn = dbColumns.get(i);
-			if(!insertWithoutColumnList.contains(Utils.toFieldName(dbColumn))){
+			if(!insertWithoutColumnList.contains(mysqlOrOracle==Utils.MYSQL?Utils.toFieldName(dbColumn):dbColumn)){
 				strInsert.append(dbColumn + ",");
 			}
 		}
@@ -120,7 +128,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	public static StringBuilder getInsrtSqlB(String tableName)
 			throws SQLException {
 
-		List<String> columns = Utils.getColumn(tableName);
+		List<String> columns = Utils.getColumn(tableName,mysqlOrOracle);
 		StringBuilder strInsertValue = new StringBuilder("values (");
 		for (int i=1;i<columns.size();i++) {
 			String column = columns.get(i);
@@ -139,7 +147,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	public static StringBuilder getUpdateSql(String tableName)
 			throws SQLException {
 
-		List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName);
+		List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName,mysqlOrOracle);
 		StringBuilder strInsertValue = new StringBuilder(" update ").append(tableName).append(" set ");
 		for (int i = 1; i < list.size(); i++) {
 			HashMap<String, Object> hsp = list.get(i);
@@ -157,7 +165,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	// 获取qureyBeansql语句append第1句
 	public static StringBuilder getQueryBeanSqlA(String tableName)
 			throws SQLException {
-		List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName);
+		List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName,mysqlOrOracle);
 		StringBuilder strQuery = new StringBuilder("select ");
 		for (int i = 0; i < list.size() ; i++) {
 			HashMap<String, Object> hsp = list.get(i);
@@ -167,6 +175,23 @@ public class SystemServiceCodeGen extends SysCodeGen {
 		strQuery.deleteCharAt(strQuery.lastIndexOf(","));
 		return strQuery;
 	}
+	
+	// 获取qureyBeansql语句append第1句
+    public static StringBuilder getOracleQueryBeanSql(String tableName)
+            throws SQLException {
+        List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName,Utils.ORACLE);
+        StringBuilder strQuery = new StringBuilder("SELECT * from ( SELECT ROWNUM AS rowno, ");
+        for (int i = 0; i < list.size() ; i++) {
+            HashMap<String, Object> hsp = list.get(i);
+            String cloumn = (String) hsp.get("NAME");
+            strQuery.append(cloumn + ",");
+        }
+        strQuery.deleteCharAt(strQuery.lastIndexOf(","));
+        strQuery.append(" from ").append(tableName).append(") table_alias ");
+        strQuery.append(" WHERE table_alias.rowno <= ? AND table_alias.rowno >= ?");
+        
+        return strQuery;
+    }
 	
 	public static StringBuilder getCountSql(String tableName){
 		StringBuilder strQuery = new StringBuilder("select count(1) from ").append(tableName);
@@ -187,7 +212,11 @@ public class SystemServiceCodeGen extends SysCodeGen {
 
 	public  void create() throws SQLException {
 		createEntity(ENTITY_TEMPLATE);
-		createDao(DAO_TEMPLATE);
+		if(mysqlOrOracle == Utils.MYSQL){
+		    createDao(DAO_TEMPLATE);
+		}else{
+		    createDao(DAO_ORACLE_TEMPLATE);
+		}
 		createIService(SERVICE_TEMPLATE);
 		createService(SERVICEIMPL_TEMPLATE);
      }

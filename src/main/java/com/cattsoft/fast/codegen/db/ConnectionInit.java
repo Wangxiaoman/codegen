@@ -90,6 +90,8 @@ public class ConnectionInit {
       SysCodeGen.updateWithoutColumnList = Arrays.asList(pro.getProperty("updateWithoutColumn").split(","));
 
       SysCodeGen.domainWithoutNot = pro.getProperty("domainWithoutNot");
+      
+      SysCodeGen.mysqlOrOracle = Integer.valueOf(pro.getProperty("mysql.or.oracle"));
     } catch (Exception e) {
       e.printStackTrace();
     }

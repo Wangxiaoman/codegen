@@ -19,6 +19,9 @@ public class SysCodeGen {
   public static List<String> updateWithoutColumnList = null;
   //
   public static String domainWithoutNot = "";
+  
+  // 默认为mysql
+  public static int mysqlOrOracle;
 
   public SysCodeGen() {
     new ConnectionInit();
@@ -29,7 +32,7 @@ public class SysCodeGen {
    */
   public void create(String template, String flag, String dir) throws SQLException {
     FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-    List<String> tableNameList = Utils.getAllTableName();
+    List<String> tableNameList = Utils.getAllTableName(mysqlOrOracle);
     for (int i = 0; i < tableNameList.size(); i++) {
       String tableName = tableNameList.get(i);
       String className = Utils.toClassName(tableName);
@@ -45,7 +48,7 @@ public class SysCodeGen {
    */
   public void createImpl(String template, String flag, String dir) throws SQLException {
     FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-    List<String> tableNameList = Utils.getAllTableName();
+    List<String> tableNameList = Utils.getAllTableName(mysqlOrOracle);
     for (int i = 0; i < tableNameList.size(); i++) {
       String tableName = tableNameList.get(i);
       String className = Utils.toClassName(tableName);
@@ -54,7 +57,7 @@ public class SysCodeGen {
       HashMap<String, Object> hashMap = new HashMap<String, Object>();
       hashMap.put("className", className);
       hashMap.put("primaryKey", primaryKeyName);
-      List<String> columnNameList = Utils.getColumn(tableName);
+      List<String> columnNameList = Utils.getColumn(tableName,mysqlOrOracle);
       List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
       for (int a = 0; a < columnNameList.size(); a++) {
         HashMap<String, Object> hash = new HashMap<String, Object>();

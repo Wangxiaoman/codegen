@@ -13,23 +13,35 @@ import java.util.Map;
 import com.cattsoft.fast.codegen.db.OperateDB;
 
 public class Utils {
+    
+    public static final int MYSQL = 0;
+    public static final int ORACLE = 1;
 	
 	public static String strTableName=null;
 	public static String strDatabase=null;
 	
 	//得到 Fast_dev 用户下所有 表名字
-	public static List<String> getAllTableName() throws SQLException{
+	public static List<String> getAllTableName(int mysqlOrOracle) throws SQLException{
 		List<String> list=new ArrayList<String>();
 		
 		if(strTableName!=null&&strTableName.length()>0){
 			String str[]=strTableName.split(",");
 			list = Arrays.asList(str);
 		}else{
-			StringBuilder strSql=new StringBuilder("show tables from ").append(strDatabase);
+		    StringBuilder strSql=null;
+		    if(mysqlOrOracle == MYSQL){
+		        strSql = new StringBuilder("show tables from ").append(strDatabase);
+		    }else{
+		        strSql = new StringBuilder("SELECT table_name FROM dba_tables");
+		    }
 			OperateDB operateDb=new OperateDB();
 			ResultSet rs=operateDb.executeQuery(strSql.toString());
 			while(rs.next()){
-				list.add(rs.getString("Tables_in_"+strDatabase));
+			    if(mysqlOrOracle == MYSQL){
+			        list.add(rs.getString("Tables_in_"+strDatabase));
+			    }else{
+			        list.add(rs.getString("table_name").replace("$",""));
+			    }
 			}
 			operateDb.releaseConnection();		
 		}
@@ -37,93 +49,118 @@ public class Utils {
 	}
 	
 	//得到 Fast_dev 用户下每张 表 所对应的 列名去掉“_”字母转换变成JAVA实体类属性
-	public static List<String> getColumn(String tableName) throws SQLException{
+	public static List<String> getDBColumn(String tableName,int mysqlOrOracle) throws SQLException{
 		OperateDB operateDb=new OperateDB();
 		List<String> list=new ArrayList<String>();
-		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
+		StringBuilder strSql=null;
+        if(mysqlOrOracle == MYSQL){
+            strSql = new StringBuilder("show full fields from "+tableName);	
+        }else{
+            strSql = new StringBuilder("select * from user_tab_columns where table_name='"+tableName).append("'");
+        }
 		ResultSet rs=operateDb.executeQuery(strSql.toString());
 		while(rs.next()){
-			list.add(toFieldName(rs.getString("Field")));
-		}
-		operateDb.releaseConnection();		
-		return list;	
-	}
-	//获取数据库用户下每张表对应的字段（不做改变）
-	public static List<String> getDBColumn(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB();
-		List<String> list=new ArrayList<String>();
-		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
-		ResultSet rs=operateDb.executeQuery(strSql.toString());
-		while(rs.next()){
-			list.add(rs.getString("Field"));
+		    if(mysqlOrOracle == MYSQL){
+		        list.add(toFieldName(rs.getString("Field")));
+            }else{
+                list.add(toFieldName(rs.getString("COLUMN_NAME")));
+            }
 		}
 		operateDb.releaseConnection();		
 		return list;	
 	}
 	
-	//得到 Fast_dev 用户下每张 表 所对应的 列名(未转变)、数据类型及列的注释
-	public static List<HashMap<String,Object>> getColumnDataType(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB();
-		List<HashMap<String,Object>> list=new ArrayList<HashMap<String,Object>>();
-		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
-		ResultSet rs=operateDb.executeQuery(strSql.toString());
-		while(rs.next()){
-			HashMap<String,Object> hsp=new HashMap<String,Object>();
-			hsp.put("NAME", rs.getString("Field"));
-			String dataType = rs.getString("Type").toLowerCase();
-			if(dataType.contains("char") || dataType.contains("text")){
-				hsp.put("TYPE", String.class.getSimpleName());
-			}else if(dataType.contains("int")){
-				hsp.put("TYPE", int.class.getSimpleName());
-			}else if(dataType.contains("time")){
-				hsp.put("TYPE", Date.class.getSimpleName());
-			}else if(dataType.contains("float")){
-				hsp.put("TYPE", float.class.getSimpleName());
-			}else if(dataType.contains("double")){
-				hsp.put("TYPE", double.class.getSimpleName());
-			}else if(dataType.contains("decimal")){
-				hsp.put("TYPE", BigDecimal.class.getSimpleName());
-			}
-			
-			hsp.put("COMMENT", rs.getString("Comment"));
-			list.add(hsp);
-		}
-		operateDb.releaseConnection();		
-		return list;		
-	}
+	//得到 Fast_dev 用户下每张 表 所对应的 列名去掉“_”字母转换变成JAVA实体类属性
+    public static List<String> getColumn(String tableName,int mysqlOrOracle) throws SQLException{
+        OperateDB operateDb=new OperateDB();
+        List<String> list=new ArrayList<String>();
+        StringBuilder strSql=null;
+        if(mysqlOrOracle == MYSQL){
+            strSql = new StringBuilder("show full fields from "+tableName); 
+        }else{
+            strSql = new StringBuilder("select * from user_tab_columns where table_name='"+tableName).append("'");
+        }
+        ResultSet rs=operateDb.executeQuery(strSql.toString());
+        while(rs.next()){
+            if(mysqlOrOracle == MYSQL){
+                list.add(rs.getString("Field"));
+            }else{
+                list.add(rs.getString("COLUMN_NAME"));
+            }
+        }
+        operateDb.releaseConnection();      
+        return list;    
+    }
+	
 	
 	//得到 Fast_dev 用户下每张 表 所对应的 列名(未转变)、数据类型及列的注释
-	public static List<HashMap<String,Object>> getColumnNameAndType(String tableName) throws SQLException{
+	public static List<HashMap<String,Object>> getColumnDataType(String tableName,int mysqlOrOracle) throws SQLException{
 		OperateDB operateDb=new OperateDB();
 		List<HashMap<String,Object>> list=new ArrayList<HashMap<String,Object>>();
-		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
+		
+		StringBuilder strSql= null;
+		if(mysqlOrOracle == MYSQL){
+		    strSql = new StringBuilder("show full fields from "+tableName);	
+		}else{
+		    strSql = new StringBuilder("select c.COLUMN_NAME,c.DATA_TYPE,c.DATA_LENGTH,c.DATA_PRECISION,c.DATA_SCALE,cm.COMMENTS from USER_TAB_COLUMNS c, USER_COL_COMMENTS cm ");
+		    strSql.append(" where c.TABLE_NAME = cm.TABLE_NAME and c.COLUMN_NAME=cm.COLUMN_NAME  and  c.TABLE_NAME='"+tableName).append("'");   
+		}
+		
 		ResultSet rs=operateDb.executeQuery(strSql.toString());
 		while(rs.next()){
 			HashMap<String,Object> hsp=new HashMap<String,Object>();
-			hsp.put("NAME", toFieldName(rs.getString("Field")));
-			String dataType = rs.getString("Type").toLowerCase();
-			if(dataType.contains("char") || dataType.contains("text")){
-				hsp.put("TYPE", String.class.getSimpleName());
-			}else if(dataType.contains("int")){
-				hsp.put("TYPE", int.class.getSimpleName());
-			}else if(dataType.contains("time")){
-				hsp.put("TYPE", Date.class.getSimpleName());
-			}else if(dataType.contains("float")){
-				hsp.put("TYPE", float.class.getSimpleName());
-			}else if(dataType.contains("double")){
-				hsp.put("TYPE", double.class.getSimpleName());
-			}else if(dataType.contains("decimal")){
-				hsp.put("TYPE", BigDecimal.class.getSimpleName());
+			if(mysqlOrOracle == MYSQL){
+    			hsp.put("NAME", rs.getString("Field"));
+    			hsp.put("BEANNAME", toFieldName(rs.getString("Field")));
+    			String dataType = rs.getString("Type").toLowerCase();
+    			if(dataType.contains("char") || dataType.contains("text")){
+    				hsp.put("TYPE", String.class.getSimpleName());
+    			}else if(dataType.contains("int")){
+    				hsp.put("TYPE", int.class.getSimpleName());
+    			}else if(dataType.contains("time")){
+    				hsp.put("TYPE", Date.class.getSimpleName());
+    			}else if(dataType.contains("float")){
+    				hsp.put("TYPE", float.class.getSimpleName());
+    			}else if(dataType.contains("double")){
+    				hsp.put("TYPE", double.class.getSimpleName());
+    			}else if(dataType.contains("decimal")){
+    				hsp.put("TYPE", BigDecimal.class.getSimpleName());
+    			}
+    			
+    			hsp.put("COMMENT", rs.getString("Comment"));
 			}else{
-				hsp.put("TYPE", String.class.getSimpleName());
+			    hsp.put("NAME", rs.getString("COLUMN_NAME"));
+			    hsp.put("BEANNAME", toFieldName(rs.getString("COLUMN_NAME")));
+                String dataType = rs.getString("DATA_TYPE").toLowerCase();
+                
+                if(dataType.contains("varchar") || dataType.contains("varchar2") || dataType.contains("text")){
+                    hsp.put("TYPE", String.class.getSimpleName());
+                }else if(dataType.contains("number")){
+                    int dataScale = rs.getInt("DATA_SCALE");
+//                    int dataLength = rs.getInt("DATA_LENGTH");    
+                    int dataPrecision = rs.getInt("DATA_PRECISION"); 
+                    
+                    if(dataScale == 0){
+                        if(dataPrecision > 10){
+                            hsp.put("TYPE", Long.class.getSimpleName());
+                        }else{
+                            hsp.put("TYPE", Integer.class.getSimpleName());
+                        }
+                    }else{
+                        hsp.put("TYPE", BigDecimal.class.getSimpleName());
+                    }
+                }else if(dataType.contains("time") || dataType.contains("date")){
+                    hsp.put("TYPE", Date.class.getSimpleName());
+                }
+                
+                hsp.put("COMMENT", rs.getString("COMMENTS"));
 			}
-			
-			hsp.put("COMMENT", rs.getString("Comment"));
 			list.add(hsp);
 		}
 		operateDb.releaseConnection();		
 		return list;		
 	}
+	
 	
 	//得到表对应 的主键名称
 	//全部使用innodb，都用自增主键
@@ -167,41 +204,27 @@ public class Utils {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static Map<String,String> getColumnMap(String tableName) throws SQLException{
+	public static Map<String,String> getColumnMap(String tableName,int mysqlOrOracle) throws SQLException{
 		OperateDB operateDb=new OperateDB();
 		Map<String,String> map =new HashMap<String, String>();
-		StringBuilder strSql=new StringBuilder("show full fields from "+tableName);	
+		StringBuilder strSql= null;
+		if(mysqlOrOracle == 0){
+		    strSql = new StringBuilder("show full fields from "+tableName);	
+		}else {
+		    strSql = new StringBuilder("select * from user_tab_columns where table_name='"+tableName).append("'");   
+		}
 		ResultSet rs=operateDb.executeQuery(strSql.toString());
 		while(rs.next()){
-			map.put(toFieldName(rs.getString("Field")),rs.getString("Field"));
+		    if(mysqlOrOracle == 0){
+		        map.put(toFieldName(rs.getString("Field")),rs.getString("Field"));
+		    }else{
+		        map.put(toFieldName(rs.getString("COLUMN_NAME")),rs.getString("COLUMN_NAME"));
+		    }
 		}
 		operateDb.releaseConnection();		
 		return map;	
 	}
 	
-	/**
-	 * 不要第1条记录 获取数据库字段对应的对象字段map wanghaolin
-	 * @param tableName
-	 * @return
-	 * @throws SQLException
-	 */
-	public static Map<String,String> getColumnMapElseByOne(String tableName) throws SQLException{
-		OperateDB operateDb=new OperateDB();
-		Map<String,String> map =new HashMap<String, String>();
-		StringBuilder strSql = new StringBuilder();
-		strSql.append("select distinct column_name  from dba_cons_columns where table_name='"+tableName+"'" );
-		strSql.append(" and column_name not in( select distinct b.column_name ");
-		strSql.append(" from dba_constraints a, dba_cons_columns b where a.table_name = '"+tableName+"'");
-		strSql.append(" AND a.CONSTRAINT_TYPE = 'P' and a.constraint_name = b.constraint_name)");
-		ResultSet rs=operateDb.executeQuery(strSql.toString());
-		while(rs.next()){
-			map.put(toFieldName(rs.getString("column_name")),rs.getString("column_name"));
-		}
-		operateDb.releaseConnection();		
-		return map;	
-	}
-
-    
   //变成Java类样式的 字段名    即第一个单词首字母小写，其余单词首字母大写
     public static String toFieldName(String name){
     	String strName[]=name.split("_");

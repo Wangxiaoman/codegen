@@ -34,6 +34,15 @@ public interface ${className}Service {
      int delete(int id) throws Exception;
 
     /**
+     * 查询集合 -- 针对web站
+     *
+     * @param page 查询开始页数； pageSize 数量
+     * @return 实体对象列表
+     * @throws Exception 系统异常
+     */
+    Pagination<${className}> queryWebList(int page,int pageSize) throws Exception;
+    
+    /**
      * 查询集合
      *
      * @param page 查询开始页数； pageSize 数量

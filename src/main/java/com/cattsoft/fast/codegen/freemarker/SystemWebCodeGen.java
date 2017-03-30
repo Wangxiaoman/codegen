@@ -26,7 +26,7 @@ public class SystemWebCodeGen extends SysCodeGen{
 
 	public void controller(String template,String flag,String dir,boolean isWeb) throws SQLException{
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-		List<String> tableNameList=Utils.getAllTableName();
+		List<String> tableNameList=Utils.getAllTableName(mysqlOrOracle);
 		for(int i=0;i<tableNameList.size();i++){	
 			String tableName=tableNameList.get(i);
 			String className=Utils.toClassName(tableName);
@@ -41,10 +41,10 @@ public class SystemWebCodeGen extends SysCodeGen{
 			hashMap.put("className", className);
 			hashMap.put("primaryKey",primaryKeyName);
 			
-			List<HashMap<String,Object>> listAll = Utils.getColumnNameAndType(tableName);
+			List<HashMap<String,Object>> listAll = Utils.getColumnDataType(tableName, mysqlOrOracle);
 			List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
 			for(HashMap<String,Object> map : listAll){
-				String fieldName = String.valueOf(map.get("NAME"));
+				String fieldName = String.valueOf(map.get("BEANNAME"));
 				if(!insertWithoutColumnList.contains(fieldName)){
 					list.add(map);
 				}
@@ -75,7 +75,7 @@ public class SystemWebCodeGen extends SysCodeGen{
 	
 	public void createJspShow(String template,String dir) throws SQLException{
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-		List<String> tableNameList = Utils.getAllTableName();
+		List<String> tableNameList = Utils.getAllTableName(mysqlOrOracle);
 		for (int i = 0; i < tableNameList.size(); i++) {
 			String tableName = tableNameList.get(i);
 			String className = Utils.toClassName(tableName);
@@ -86,14 +86,14 @@ public class SystemWebCodeGen extends SysCodeGen{
 			hashMap.put("ctx", "${ctx}");
 			hashMap.put("model", "${model.");
 			hashMap.put("flag", "}");
-			List<HashMap<String,Object>> list = Utils.getColumnNameAndType(tableName);
+			List<HashMap<String,Object>> list = Utils.getColumnDataType(tableName, mysqlOrOracle);
 			hashMap.put("fieldName", list);
 			FreeMarkerUtils.createFile(hashMap, strPath);
 		}
 	}
 	public void createJspEdit(String template,String dir) throws SQLException{
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-		List<String> tableNameList = Utils.getAllTableName();
+		List<String> tableNameList = Utils.getAllTableName(mysqlOrOracle);
 		for (int i = 0; i < tableNameList.size(); i++) {
 			String tableName = tableNameList.get(i);
 			String className = Utils.toClassName(tableName);
@@ -105,14 +105,14 @@ public class SystemWebCodeGen extends SysCodeGen{
 			hashMap.put("model", "${model.");
 			hashMap.put("flag", "}");
 			hashMap.put("primaryKey",primaryKeyName);
-			List<HashMap<String,Object>> list = Utils.getColumnNameAndType(tableName);
+			List<HashMap<String,Object>> list = Utils.getColumnDataType(tableName,mysqlOrOracle);
 			hashMap.put("fieldName", list);
 			FreeMarkerUtils.createFile(hashMap, strPath);
 		}
 	}
 	public void createJspNew(String template,String dir) throws SQLException{
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-		List<String> tableNameList = Utils.getAllTableName();
+		List<String> tableNameList = Utils.getAllTableName(mysqlOrOracle);
 		for (int i = 0; i < tableNameList.size(); i++) {
 			String tableName = tableNameList.get(i);
 			String className = Utils.toClassName(tableName);
@@ -122,7 +122,7 @@ public class SystemWebCodeGen extends SysCodeGen{
 			hashMap.put("className", className);
 			hashMap.put("ctx", "${ctx}");
 			hashMap.put("primaryKey",primaryKeyName);
-			List<HashMap<String,Object>> listAll = Utils.getColumnNameAndType(tableName);
+			List<HashMap<String,Object>> listAll = Utils.getColumnDataType(tableName,mysqlOrOracle);
 			
 			List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
 			for(HashMap<String,Object> map : listAll){
@@ -138,7 +138,7 @@ public class SystemWebCodeGen extends SysCodeGen{
 	}
 	public void createJspIndex(String template,String dir) throws SQLException{
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, template);
-		List<String> tableNameList = Utils.getAllTableName();
+		List<String> tableNameList = Utils.getAllTableName(mysqlOrOracle);
 		for (int i = 0; i < tableNameList.size(); i++) {
 			String tableName = tableNameList.get(i);
 			String className = Utils.toClassName(tableName);
@@ -148,7 +148,7 @@ public class SystemWebCodeGen extends SysCodeGen{
 			hashMap.put("className", className);
 			hashMap.put("ctx", "${ctx}");
 			hashMap.put("primaryKey",primaryKeyName);
-			List<HashMap<String,Object>> list = Utils.getColumnNameAndType(tableName);
+			List<HashMap<String,Object>> list = Utils.getColumnDataType(tableName, mysqlOrOracle);
 			hashMap.put("fieldName", list);
 			FreeMarkerUtils.createFile(hashMap, strPath);
 		}
@@ -156,7 +156,7 @@ public class SystemWebCodeGen extends SysCodeGen{
 	
 	public void createApplicationXml() throws SQLException{
 		FreeMarkerUtils.getTemplate(SYSTEM_TEMPLATE_DIR, APPLICATION);
-		List<String> tableNameList =Utils.getAllTableName();
+		List<String> tableNameList =Utils.getAllTableName(mysqlOrOracle);
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		String strPath = fileDir +"applicationXml//"+"applicationContext-system-service" + ".xml";
 		List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
