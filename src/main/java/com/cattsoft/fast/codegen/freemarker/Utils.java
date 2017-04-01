@@ -49,7 +49,7 @@ public class Utils {
 	}
 	
 	//得到 Fast_dev 用户下每张 表 所对应的 列名去掉“_”字母转换变成JAVA实体类属性
-	public static List<String> getDBColumn(String tableName,int mysqlOrOracle) throws SQLException{
+	public static List<String> getColumn(String tableName,int mysqlOrOracle) throws SQLException{
 		OperateDB operateDb=new OperateDB();
 		List<String> list=new ArrayList<String>();
 		StringBuilder strSql=null;
@@ -71,7 +71,7 @@ public class Utils {
 	}
 	
 	//得到 Fast_dev 用户下每张 表 所对应的 列名去掉“_”字母转换变成JAVA实体类属性
-    public static List<String> getColumn(String tableName,int mysqlOrOracle) throws SQLException{
+    public static List<String> getDBColumn(String tableName,int mysqlOrOracle) throws SQLException{
         OperateDB operateDb=new OperateDB();
         List<String> list=new ArrayList<String>();
         StringBuilder strSql=null;

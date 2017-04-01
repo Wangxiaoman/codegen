@@ -109,9 +109,10 @@ public class SystemServiceCodeGen extends SysCodeGen {
 		List<String> dbColumns = Utils.getDBColumn(tableName,mysqlOrOracle);
 		StringBuilder strInsert = new StringBuilder("insert into " + tableName + " (");
 
-		for (int i=1;i<dbColumns.size();i++) {
+		int beginIndex = (mysqlOrOracle==Utils.MYSQL?1:0);
+		for (int i=beginIndex;i<dbColumns.size();i++) {
 			String dbColumn = dbColumns.get(i);
-			if(!insertWithoutColumnList.contains(mysqlOrOracle==Utils.MYSQL?Utils.toFieldName(dbColumn):dbColumn)){
+			if(!insertWithoutColumnList.contains(Utils.toFieldName(dbColumn))){
 				strInsert.append(dbColumn + ",");
 			}
 		}
@@ -130,9 +131,12 @@ public class SystemServiceCodeGen extends SysCodeGen {
 
 		List<String> columns = Utils.getColumn(tableName,mysqlOrOracle);
 		StringBuilder strInsertValue = new StringBuilder("values (");
+		if(mysqlOrOracle==Utils.ORACLE){
+		    strInsertValue.append("SEQ_").append(tableName).append("_ID.nextval").append(",");
+		}
 		for (int i=1;i<columns.size();i++) {
 			String column = columns.get(i);
-			if(!insertWithoutColumnList.contains(column)){
+			if(!insertWithoutColumnList.contains(Utils.toFieldName(column))){
 				strInsertValue.append("#{").append(column + "},");
 			}
 		}
