@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ${className}Dao {
+public interface ${className}Mapper {
     
     @Insert("${insertsql1} ${insertsql2}")
 	@Options(useGeneratedKeys = true)

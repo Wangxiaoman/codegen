@@ -29,7 +29,6 @@ public class ${className}Controller{
 	@RequestMapping(value = "/${className?uncap_first}", method = RequestMethod.POST)
 	@ResponseBody
 	public ResultJson save(
-		@RequestParam(value = "id",defaultValue="0",required=false) int id,
 		<#list fieldName as field>
 			@RequestParam(value = "${field.BEANNAME}") ${field.TYPE} ${field.BEANNAME}<#if field_has_next> ,</#if>
 		</#list>
