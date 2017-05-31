@@ -1,4 +1,4 @@
-package com.ott.controller;
+package ${packagePath}.controller;
 
 import java.util.List;
 import java.util.Date;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ott.domain.${className};
-import com.ott.service.${className}Service;
-import com.ott.constants.ResultJson;
-import com.ott.constants.CommonStatus;
+import ${packagePath}.domain.${className};
+import ${packagePath}.service.${className}Service;
+import ${packagePath}.constants.ResultJson;
+import ${packagePath}.constants.CommonStatus;
 
 @Controller
 public class ${className}Controller{

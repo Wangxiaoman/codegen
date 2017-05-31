@@ -1,4 +1,4 @@
-package com.ott.domain;
+package ${packagePath}.domain;
 import java.util.Date;
 import lombok.Data;
 

@@ -92,6 +92,8 @@ public class ConnectionInit {
       SysCodeGen.domainWithoutNot = pro.getProperty("domainWithoutNot");
       
       SysCodeGen.mysqlOrOracle = Integer.valueOf(pro.getProperty("mysql.or.oracle"));
+      
+      SysCodeGen.packagePath = pro.getProperty("package.path");
     } catch (Exception e) {
       e.printStackTrace();
     }

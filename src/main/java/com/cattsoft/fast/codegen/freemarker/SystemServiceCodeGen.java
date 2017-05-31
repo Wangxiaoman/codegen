@@ -27,6 +27,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			String className = Utils.toClassName(tableName);
 			String strPath = fileDir + "vo//" + className + ".java";
 			HashMap<String, Object> hashMap = new HashMap<String, Object>();
+			hashMap.put("packagePath", packagePath);
 			hashMap.put("className", className);
 			List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName,mysqlOrOracle);
 			for(Map<String,Object> map : list){
@@ -36,6 +37,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			}
 			hashMap.put("fieldName", list);
 			hashMap.put("domainWithoutNot", domainWithoutNot);
+			hashMap.put("packagePath", packagePath);
 			hashMap.put("filedMap", Utils.getColumnMap(tableName,mysqlOrOracle));
 			FreeMarkerUtils.createFile(hashMap, strPath);
 			
@@ -98,6 +100,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			
 			hashMap.put("fieldName", list);
 			hashMap.put("filedMap", Utils.getColumnMap(tableName,mysqlOrOracle));
+			hashMap.put("packagePath", packagePath);
 			FreeMarkerUtils.createFile(hashMap, strPath);
 		}
 	}
@@ -203,7 +206,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	}
 
 	public void createDao(String template) throws SQLException {
-		createDAOImpl(template, "Dao", "dao");
+		createDAOImpl(template, "Mapper", "mapper");
 	}
 	
 	public void createIService(String template) throws SQLException {

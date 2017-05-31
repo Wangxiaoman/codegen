@@ -1,6 +1,6 @@
-package com.ott.dao;
+package ${packagePath}.dao;
 
-import com.ott.domain.${className};
+import ${packagePath}.domain.${className};
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
-@Repository
-public interface ${className}Dao {
+@Mapper
+public interface ${className}Mapper {
     
     @Insert("${insertsql1} ${insertsql2}")
 	@Options(useGeneratedKeys = true)

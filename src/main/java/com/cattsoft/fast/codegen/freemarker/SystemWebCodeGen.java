@@ -38,6 +38,7 @@ public class SystemWebCodeGen extends SysCodeGen{
 				strPath=fileDir+dir+"//"+className+flag+".java";
 			}
 			HashMap<String,Object> hashMap=new HashMap<String,Object>();
+			hashMap.put("packagePath", packagePath);
 			hashMap.put("className", className);
 			hashMap.put("primaryKey",primaryKeyName);
 			

@@ -39,7 +39,7 @@ public class FileUtil {
   
   public static void genFolder() {
     // ,"delegate","delegate//impl","delegate//impl//ejb","delegate//impl//bean","dao//impl","domain","domain//impl","applicationXml"
-    String folders[] = new String[] { "vo", "dao", "service", "service//impl", "controller", "controller//web", "jsp" };
+    String folders[] = new String[] { "vo", "mapper", "service", "service//impl", "controller", "controller//web", "jsp" };
     String strBaseDir = pro.getProperty("createFileDir");
     File baseDir = new File(strBaseDir);
     baseDir.mkdir();

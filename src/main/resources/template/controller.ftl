@@ -1,4 +1,4 @@
-package com.ott.controller.web;
+package ${packagePath}.web;
 
 import java.util.List;
 import java.util.Date;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ott.domain.${className};
-import com.ott.service.${className}Service;
-import com.ott.platform.web.paging.Pagination;
+import ${packagePath}.domain.${className};
+import ${packagePath}.service.${className}Service;
+import ${packagePath}.platform.web.paging.Pagination;
 
 @Controller
 @RequestMapping("/web")

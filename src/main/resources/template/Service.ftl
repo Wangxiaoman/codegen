@@ -1,7 +1,7 @@
-package com.ott.service;
+package ${packagePath}.service;
 
-import com.ott.domain.${className};
-import com.ott.platform.web.paging.Pagination;
+import ${packagePath}.domain.${className};
+import ${packagePath}.platform.web.paging.Pagination;
 
 import java.util.List;
 
@@ -11,44 +11,44 @@ public interface ${className}Service {
      *
      * @param entity 实体对象
      * @return 实体对象
-     * @throws Exception 系统异常
+     * @ 系统异常
      */
-     int insert(${className} ${className?uncap_first}) throws Exception;
+     int insert(${className} ${className?uncap_first}) ;
 
     /**
      * 修改
      *
      * @param entity 实体对象
      * @return 更新记录数
-     * @throws Exception 系统异常
+     * @ 系统异常
      */
-     int update(${className} ${className?uncap_first}) throws Exception;
+     int update(${className} ${className?uncap_first}) ;
 
     /**
      * 删除
      *
      * @param id
      * @return 删除记录数
-     * @throws Exception 系统异常
+     * @ 系统异常
      */
-     int delete(int id) throws Exception;
+     int delete(int id) ;
 
     /**
      * 查询集合
      *
      * @param page 查询开始页数； pageSize 数量
      * @return 实体对象列表
-     * @throws Exception 系统异常
+     * @ 系统异常
      */
-    List<${className}> queryList(int page,int pageSize) throws Exception;
+    List<${className}> queryList(int page,int pageSize) ;
 
     /**
      * 查询对象
      *
      * @param id 
      * @return 实体对象
-     * @throws Exception 系统异常
+     * @ 系统异常
      */
-    ${className} queryById(int id) throws Exception;
+    ${className} queryById(int id) ;
 
 }

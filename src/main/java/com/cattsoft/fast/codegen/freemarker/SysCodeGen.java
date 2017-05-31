@@ -20,6 +20,8 @@ public class SysCodeGen {
   //
   public static String domainWithoutNot = "";
   
+  public static String packagePath = "";
+  
   // 默认为mysql
   public static int mysqlOrOracle;
 
@@ -39,6 +41,7 @@ public class SysCodeGen {
       String strPath = fileDir + dir + "//" + className + flag + ".java";
       HashMap<String, Object> hashMap = new HashMap<String, Object>();
       hashMap.put("className", className);
+      hashMap.put("packagePath", packagePath);
       FreeMarkerUtils.createFile(hashMap, strPath);
     }
   }
@@ -65,6 +68,7 @@ public class SysCodeGen {
         list.add(hash);
       }
       hashMap.put("fieldName", list);
+      hashMap.put("packagePath", packagePath);
       FreeMarkerUtils.createFile(hashMap, strPath);
     }
   }
