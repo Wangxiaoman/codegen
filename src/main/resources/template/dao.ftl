@@ -1,4 +1,4 @@
-package ${packagePath}.dao;
+package ${packagePath}.mapper;
 
 import ${packagePath}.domain.${className};
 
