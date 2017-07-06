@@ -29,6 +29,5 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.33</version>
         </dependency>
-        
     </dependencies>
 </project>
