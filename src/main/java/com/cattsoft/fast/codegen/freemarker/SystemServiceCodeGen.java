@@ -155,7 +155,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			throws SQLException {
 
 		List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName,mysqlOrOracle);
-		StringBuilder strInsertValue = new StringBuilder(" update ").append(tableName).append(" set ");
+		StringBuilder strInsertValue = new StringBuilder("update ").append(tableName).append(" set ");
 		for (int i = 1; i < list.size(); i++) {
 			HashMap<String, Object> hsp = list.get(i);
 			String cloumn = (String) hsp.get("NAME");
