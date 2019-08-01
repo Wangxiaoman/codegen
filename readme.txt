@@ -1,1 +1,2 @@
-暂时只能用于mysql生成代码
+1、配置文件使用jdbc-config.properties
+2、生成使用main方法来执行
