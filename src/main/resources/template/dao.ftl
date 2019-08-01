@@ -15,9 +15,19 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ${className}Mapper {
     
-    @Insert("${insertsql1} ${insertsql2}")
+    @Insert("${insertsql1} values ${insertsql2}")
 	@Options(useGeneratedKeys = true)
 	int insert(${className} ${className?uncap_first}); 
+	
+	@Insert({
+        "<script>"
+        + "${insertsql1} values"
+        + "<foreach item='item' index='index' collection='${className?uncap_first}s' separator=',' >"
+        +    "${insertSqlBatch}"
+        + "</foreach>"
+        +"</script>" 
+    })
+    int batchInsert(@Param("${className?uncap_first}s")List<className> ${className?uncap_first}s);
 	
 	@Update("${updatesql}")
 	int update(${className} ${className?uncap_first});
@@ -27,6 +37,16 @@ public interface ${className}Mapper {
 	
 	@Select("${querysql}")
 	List<${className}> queryList(@Param("offset")int offset,@Param("limit")int limit);
+	
+	@Select({
+        "<script>"
+            + "select * from ${queryBeanSqlNoCondition} WHERE id in "
+            + "<foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>"
+            +    "${r'#{item}'}"
+            + "</foreach>" 
+        +"</script>" 
+    })
+    List<className> queryListByIds(@Param("ids")List<Integer> ids);
 	
 	@Select("${queryBeanSqlById}")
 	${className} getById(@Param("id")int id);
