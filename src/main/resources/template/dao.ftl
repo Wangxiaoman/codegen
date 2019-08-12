@@ -27,7 +27,7 @@ public interface ${className}Mapper {
         + "</foreach>"
         +"</script>" 
     })
-    int batchInsert(@Param("${className?uncap_first}s")List<className> ${className?uncap_first}s);
+    int batchInsert(@Param("${className?uncap_first}s")List<${className}> ${className?uncap_first}s);
 	
 	@Update("${updatesql}")
 	int update(${className} ${className?uncap_first});
@@ -46,7 +46,7 @@ public interface ${className}Mapper {
             + "</foreach>" 
         +"</script>" 
     })
-    List<className> queryListByIds(@Param("ids")List<Integer> ids);
+    List<${className}> queryListByIds(@Param("ids")List<Integer> ids);
 	
 	@Select("${queryBeanSqlById}")
 	${className} getById(@Param("id")int id);
