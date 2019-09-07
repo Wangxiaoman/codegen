@@ -56,7 +56,8 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			//List  column =Utils.getDBColumn(tableName);
 			String className = Utils.toClassName(tableName);
 			StringBuilder insertSqlA = getInsrtSqlA(tableName);
-			StringBuilder insertSqlB = getInsrtSqlB(tableName);
+			StringBuilder insertSqlB = getInsrtSqlB(tableName, false);
+			StringBuilder insertSqlBatch = getInsrtSqlB(tableName,true);
 			StringBuilder updateSql = getUpdateSql(tableName).append(" where id=#{id}");
 
 			StringBuilder queryBeanSql = null;
@@ -65,7 +66,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			}else{
 			    queryBeanSql = getOracleQueryBeanSql(tableName);
 			}
-			
+			StringBuilder queryBeanSqlNoCondition = getQueryBeanSqlA(tableName).append(" from ").append(tableName);
 			StringBuilder queryBeanSqlById = getQueryBeanSqlA(tableName).append(" from ").append(tableName).append(" where id=#{id}");
 			StringBuilder deleteSql = new StringBuilder("delete from ").append(tableName).append(" where id=#{id}");
 			String primaryKeyName = Utils.toFieldName(Utils
@@ -80,9 +81,11 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			hashMap.put("primaryKey", primaryKeyName);
 			hashMap.put("insertsql1", insertSqlA);
 			hashMap.put("insertsql2", insertSqlB);
+			hashMap.put("insertSqlBatch",insertSqlBatch);
 			hashMap.put("updatesql", updateSql);
 			hashMap.put("querysql", queryBeanSql);
 			hashMap.put("queryBeanSqlById", queryBeanSqlById);
+			hashMap.put("queryBeanSqlNoCondition", queryBeanSqlNoCondition);
 			hashMap.put("deleteSql", deleteSql);
 			hashMap.put("countSql", getCountSql(tableName));
 			
@@ -129,18 +132,22 @@ public class SystemServiceCodeGen extends SysCodeGen {
 	}
 
 	// 获取insertsql语句append第2句
-	public static StringBuilder getInsrtSqlB(String tableName)
+	public static StringBuilder getInsrtSqlB(String tableName, boolean batch)
 			throws SQLException {
 
 		List<String> columns = Utils.getColumn(tableName,mysqlOrOracle);
-		StringBuilder strInsertValue = new StringBuilder("values (");
+		StringBuilder strInsertValue = new StringBuilder(" (");
 		if(mysqlOrOracle==Utils.ORACLE){
 		    strInsertValue.append("SEQ_").append(tableName).append("_ID.nextval").append(",");
 		}
 		for (int i=1;i<columns.size();i++) {
 			String column = columns.get(i);
 			if(!insertWithoutColumnList.contains(Utils.toFieldName(column))){
-				strInsertValue.append("#{").append(column + "},");
+			    if(batch) {
+			        strInsertValue.append("#{item.").append(column + "},");
+			    }else {
+			        strInsertValue.append("#{").append(column + "},");
+			    }
 			}
 		}
 		strInsertValue.deleteCharAt(strInsertValue.lastIndexOf(","));
@@ -149,13 +156,13 @@ public class SystemServiceCodeGen extends SysCodeGen {
 
 		return strInsertValue;
 	}
-
+	
 	// 获取updatesql语句append第2句
 	public static StringBuilder getUpdateSql(String tableName)
 			throws SQLException {
 
 		List<HashMap<String, Object>> list = Utils.getColumnDataType(tableName,mysqlOrOracle);
-		StringBuilder strInsertValue = new StringBuilder(" update ").append(tableName).append(" set ");
+		StringBuilder strInsertValue = new StringBuilder("update ").append(tableName).append(" set ");
 		for (int i = 1; i < list.size(); i++) {
 			HashMap<String, Object> hsp = list.get(i);
 			String cloumn = (String) hsp.get("NAME");

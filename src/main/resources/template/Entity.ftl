@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class ${className} {
 
-
 <#list fieldName as field>
 	<#if domainWithoutNot == 'use' >
 	${field.COMMENT}
