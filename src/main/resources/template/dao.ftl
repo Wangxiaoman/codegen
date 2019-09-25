@@ -40,7 +40,7 @@ public interface ${className}Mapper {
 	
 	@Select({
         "<script>"
-            + "select * from ${queryBeanSqlNoCondition} WHERE id in "
+            + "${queryAllSqlNoCondition} WHERE id in "
             + "<foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>"
             +    "${r'#{item}'}"
             + "</foreach>" 
@@ -48,7 +48,7 @@ public interface ${className}Mapper {
     })
     List<${className}> queryListByIds(@Param("ids")List<Integer> ids);
 	
-	@Select("${queryBeanSqlById}")
+	@Select("${queryAllSqlNoCondition} where id=#{id}")
 	${className} getById(@Param("id")int id);
 	
 	@Select("${countSql}")

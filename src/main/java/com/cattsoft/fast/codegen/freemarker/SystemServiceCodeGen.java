@@ -67,6 +67,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			    queryBeanSql = getOracleQueryBeanSql(tableName);
 			}
 			StringBuilder queryBeanSqlNoCondition = getQueryBeanSqlA(tableName).append(" from ").append(tableName);
+			StringBuilder queryAllSqlNoCondition = new StringBuilder("select * from ").append(tableName);
 			StringBuilder queryBeanSqlById = getQueryBeanSqlA(tableName).append(" from ").append(tableName).append(" where id=#{id}");
 			StringBuilder deleteSql = new StringBuilder("delete from ").append(tableName).append(" where id=#{id}");
 			String primaryKeyName = Utils.toFieldName(Utils
@@ -85,6 +86,7 @@ public class SystemServiceCodeGen extends SysCodeGen {
 			hashMap.put("updatesql", updateSql);
 			hashMap.put("querysql", queryBeanSql);
 			hashMap.put("queryBeanSqlById", queryBeanSqlById);
+			hashMap.put("queryAllSqlNoCondition", queryAllSqlNoCondition);
 			hashMap.put("queryBeanSqlNoCondition", queryBeanSqlNoCondition);
 			hashMap.put("deleteSql", deleteSql);
 			hashMap.put("countSql", getCountSql(tableName));
