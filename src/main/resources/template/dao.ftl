@@ -48,7 +48,7 @@ public interface ${className}Mapper {
     })
     List<${className}> queryListByIds(@Param("ids")List<Integer> ids);
 	
-	@Select("${queryAllSqlNoCondition} where id=#{id}")
+	@Select("${queryBeanSqlById}")
 	${className} getById(@Param("id")int id);
 	
 	@Select("${countSql}")
